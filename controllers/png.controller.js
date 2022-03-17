@@ -3,11 +3,11 @@ const path = require("path");
 const { printTextOnImage } = require("../utils/base.utils");
 
 
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     next();
-// });
-// app.use(express.static('public'));
+async function rootCheck(req, res) {
+
+    res.send("Ready to add name to SaveUkraine_NFT.png file");
+}
+
 
 async function setPNG(req, res) {
 
@@ -41,6 +41,7 @@ async function remPNG(req, res) {
 }
 
 module.exports = {
+    rootCheck,
     setPNG,
     getPNG,
     remPNG

@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require("cors")
 const path = require('path')
 const PORT = process.env.PORT || 8081
-const { setPNG, getPNG, remPNG } = require("./controllers/png.controller");
+const { rootCheck, setPNG, getPNG, remPNG } = require("./controllers/png.controller");
 
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config()
@@ -25,6 +25,7 @@ const corsOptions = {
 express()
   .use(express.static(path.join(__dirname, 'public')))
   .use(cors(corsOptions))
+  .get('/', rootCheck)
   .get('/setPNG/donator/:name', setPNG)
   .get('/getPNG/filename/:name', getPNG)
   .get('/remPNG/filename/:name', remPNG)
