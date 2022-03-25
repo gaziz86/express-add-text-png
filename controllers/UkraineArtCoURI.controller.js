@@ -29,10 +29,10 @@ async function getMeta(req, res) {
         });
         // console.log("Remaining new", Remaining);
     
-        res.json({"totalLeft": num_NFTids-1, "id": NFTid, "URI": metaURI});
+        res.json({"totalLeft": num_NFTids-1, "NFTid": NFTid, "CID": metaURI});
     
     } else {
-        res.json({"totalLeft": num_NFTids, "id": "", "URI": ""})
+        res.json({"totalLeft": num_NFTids, "NFTid": "", "CID": ""})
     }
 }
 
