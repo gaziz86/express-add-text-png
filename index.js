@@ -3,7 +3,7 @@ const cors = require("cors")
 const path = require('path')
 const PORT = process.env.PORT || 8081
 const { rootCheck, setPNG, getPNG, remPNG } = require("./controllers/png.controller");
-const { getMeta, revertMeta, remMeta } = require("./controllers/UkraineArtCoURI.controller");
+const { getMeta, revertMeta, remMeta, getIPFS, revertIPFS } = require("./controllers/UkraineArtCoURI.controller");
 
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config()
@@ -33,4 +33,6 @@ express()
   .get('/getMeta', getMeta)
   .get('/revertMeta/id/:NFTid/CID/:NFTcid', revertMeta)
   .get('/remMeta/NFTid/:id', remMeta)
+  .get('/getIPFS', getIPFS)
+  .get('/revertIPFS/fname/:name', revertIPFS)
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))

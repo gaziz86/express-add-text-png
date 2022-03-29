@@ -95,8 +95,78 @@ async function remMeta(req, res) {
 
 }
 
+async function getIPFS(req, res) {
+
+    // console.log("getMeta");
+
+    // get metadata
+    const jsonPath = path.join(__dirname,"../assets/dirRemaining.json");
+    var Remaining = JSON.parse(fs.readFileSync(jsonPath));
+    const CID = Remaining["CID"];
+    // console.log("Remaining", Remaining)
+    // console.log("CID", CID)
+
+    const numNFTs = Remaining.filenameIds.length;
+    if (numNFTs > 0) {
+
+        const NFTnameId = Remaining.filenameIds[Math.floor(Math.random()*numNFTs)];
+        const index = Remaining.filenameIds.indexOf(NFTnameId);
+        Remaining.filenameIds.splice(index, 1);
+        // console.log("Remaining", Remaining);
+        // console.log("NFTnameId", NFTnameId);
+    
+        // save json
+        fs.writeFile(jsonPath, JSON.stringify(Remaining), function(err) {
+            if (err) {
+                console.log(err);
+                res.send("could not write new remaining.json");
+            }
+        });
+        // console.log("Remaining new", Remaining);
+    
+        res.json({"totalLeft": numNFTs-1, "CID": CID, "NFTnameId": NFTnameId});
+    
+    } else {
+        res.json({"totalLeft": numNFTs, "CID": "", "NFTnameId": ""})
+    }
+}
+
+async function revertIPFS(req, res) {
+
+    // console.log("revertIPFS");
+    if (req.params.name) {
+        const NFTnameId = req.params.name;
+        // console.log("NFTnameId", NFTnameId, typeof(NFTnameId));
+    
+        const Remaining = JSON.parse(fs.readFileSync(path.join(__dirname,"../assets/dirRemaining.json")));
+        // console.log("Remaining", Remaining, typeof(Remaining));
+    
+        if (!(Remaining.filenameIds.includes(Number(NFTnameId)))) {
+            Remaining.filenameIds.push(Number(NFTnameId));
+            Remaining.filenameIds.sort(function(a, b) {
+                return a - b;
+            });
+            fs.writeFile(path.join(__dirname,"../assets/dirRemaining.json"), JSON.stringify(Remaining), function(err) {
+                if (err) {
+                    console.log(err);
+                    res.send("could not write new dirRemaining.json");
+                }
+            });
+            // console.log("Remaining", Remaining);
+            res.send("NFTnameId added");
+        } else {
+            res.send("NFTnameId already exist");
+        }
+    } else {
+        res.send("NFTnameId not provided")
+    }
+
+}
+
 module.exports = {
     getMeta,
     revertMeta,
-    remMeta
+    remMeta,
+    getIPFS,
+    revertIPFS
 };
