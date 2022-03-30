@@ -95,6 +95,16 @@ async function remMeta(req, res) {
 
 }
 
+async function getIPFSleft(req, res) {
+    const jsonPath = path.join(__dirname,"../assets/dirRemaining.json");
+    var Remaining = JSON.parse(fs.readFileSync(jsonPath));
+
+    const numNFTs = Remaining.filenameIds.length;
+
+    res.json({"number of left NFTs": numNFTs})
+
+}
+
 async function getIPFS(req, res) {
 
     // console.log("getMeta");
@@ -168,5 +178,6 @@ module.exports = {
     revertMeta,
     remMeta,
     getIPFS,
+    getIPFSleft,
     revertIPFS
 };
